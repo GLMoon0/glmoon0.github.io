@@ -9,96 +9,87 @@
         }
 
         #label-generator-container {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            padding: 20px;
-            background: #f4f4f4;
+            padding: 25px;
+            background: #ececec;
             border-radius: 12px;
-            max-width: 600px;
-            margin: auto;
+            max-width: 700px;
+            margin: 20px auto;
         }
 
         /* Form Styling */
         .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 15px;
             width: 100%;
         }
 
         .input-group { display: flex; flex-direction: column; }
-        label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
-        input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        textarea { grid-column: span 2; height: 50px; resize: none; }
+        label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #444; text-transform: uppercase; }
+        input, textarea { padding: 10px; border: 1px solid #bbb; border-radius: 5px; font-size: 14px; }
+        textarea { grid-column: span 2; height: 60px; }
 
-        /* The Label Preview */
+        /* THE LABEL DESIGN */
         #vinyl-label-preview {
             width: var(--label-width);
             height: var(--label-height);
             background: white;
             border: 1px solid #000;
-            padding: 0.1in 0.15in;
+            padding: 0.15in 0.2in;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             color: #000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
-        .header-line {
+        .header-row {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        .title-artist {
             font-weight: 900;
             font-size: 13pt;
             text-transform: uppercase;
-            border-bottom: 2px solid #000;
-            padding-bottom: 2px;
-            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
-        .meta-text {
+        /* Metadata Grid: 2 columns to spread things out */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr; 
+            gap: 4px 15px;
             font-size: 9pt;
-            margin: 0;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .meta-item {
+            white-space: normal; /* Allows text to wrap instead of cutting off */
         }
 
         .divider {
-            border-top: 1px solid #000;
-            margin: 4px 0;
+            border-top: 1px solid #ccc;
+            margin: 8px 0 6px 0;
         }
 
         .description-box {
-            font-size: 8.5pt;
+            font-size: 9pt;
             font-style: italic;
-            line-height: 1.2;
+            line-height: 1.3;
             flex-grow: 1;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* Limits description to 2 lines to save space */
-            -webkit-box-orient: vertical;
         }
 
-        .star { font-size: 14pt; }
-
-        /* Print Button */
-        .print-btn {
-            padding: 12px 24px;
-            background: #000;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-        .print-btn:hover { opacity: 0.8; }
+        .star { font-size: 16pt; line-height: 0; margin-left: 10px; }
 
         /* Print Logic */
         @media print {
@@ -108,9 +99,20 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                border: 1px solid #eee; /* Light border for cutting guide */
+                border: 1px solid #ddd;
                 box-shadow: none;
             }
+        }
+
+        .print-btn {
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -119,70 +121,9 @@
 <div id="label-generator-container">
     <div class="input-grid">
         <div class="input-group" style="grid-column: span 2;">
-            <label>Title & Artist</label>
+            <label>Title — Artist</label>
             <input type="text" id="in-title-artist" placeholder="Kind of Blue — Miles Davis" oninput="updateLabel()">
         </div>
         <div class="input-group">
             <label>Genre → Subgenre</label>
             <input type="text" id="in-genre" placeholder="Jazz → Modal Jazz" oninput="updateLabel()">
-        </div>
-        <div class="input-group">
-            <label>Pressing Quality</label>
-            <input type="text" id="in-pressing" placeholder="180g, NM condition" oninput="updateLabel()">
-        </div>
-        <div class="input-group">
-            <label>Date & Location</label>
-            <input type="text" id="in-date" placeholder="10.2022 @Village Vanguard" oninput="updateLabel()">
-        </div>
-        <div class="input-group">
-            <label>Recommended Track</label>
-            <input type="text" id="in-track" placeholder="So What" oninput="updateLabel()">
-        </div>
-        <textarea id="in-desc" placeholder="Brief description..." oninput="updateLabel()"></textarea>
-        
-        <div style="grid-column: span 2; display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" id="in-star" onchange="updateLabel()" checked> 
-            <label style="margin:0;">Recommended Star?</label>
-        </div>
-    </div>
-
-    <div id="vinyl-label-preview">
-        <div class="header-line">
-            <span id="out-title-artist">KIND OF BLUE — MILES DAVIS</span>
-            <span id="out-star" class="star">★</span>
-        </div>
-        <div class="meta-text"><b id="out-genre">Jazz → Modal Jazz</b></div>
-        <div class="meta-text">Pressing Quality: <span id="out-pressing">180g, NM condition</span></div>
-        <div class="meta-text"><span id="out-date">A: 10.2022 @Village Vanguard</span></div>
-        <div class="meta-text">Recommended Track: "<span id="out-track">So What</span>"</div>
-        <div class="divider"></div>
-        <div class="description-box" id="out-desc">
-            A timeless masterpiece. This pressing sounds incredible, full of warmth and detail. Essential listening for any jazz fan.
-        </div>
-    </div>
-
-    <button class="print-btn" onclick="window.print()">Print Label (4x2)</button>
-</div>
-
-<script>
-    function updateLabel() {
-        const titleArtist = document.getElementById('in-title-artist').value || "Album — Artist";
-        const genre = document.getElementById('in-genre').value || "Genre → Subgenre";
-        const pressing = document.getElementById('in-pressing').value || "Excellent";
-        const date = document.getElementById('in-date').value || "MM.YYYY @Location";
-        const track = document.getElementById('in-track').value || "Song Name";
-        const desc = document.getElementById('in-desc').value || "Description...";
-        const star = document.getElementById('in-star').checked ? "★" : "";
-
-        document.getElementById('out-title-artist').innerText = titleArtist;
-        document.getElementById('out-star').innerText = star;
-        document.getElementById('out-genre').innerText = genre;
-        document.getElementById('out-pressing').innerText = pressing;
-        document.getElementById('out-date').innerText = "A: " + date;
-        document.getElementById('out-track').innerText = track;
-        document.getElementById('out-desc').innerText = desc;
-    }
-</script>
-
-</body>
-</html>
