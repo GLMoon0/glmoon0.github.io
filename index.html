@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --label-width: 4in;
+            --label-height: 2in;
+            --bg-color: #f9f9f9;
+        }
+
+        #label-generator-container {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #eee;
+            border-radius: 8px;
+        }
+
+        /* Form Styling */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .input-group { display: flex; flex-direction: column; }
+        label { font-size: 12px; font-weight: bold; margin-bottom: 4px; }
+        input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { grid-column: span 2; height: 60px; resize: none; }
+
+        /* The Label Preview */
+        #vinyl-label-preview {
+            width: var(--label-width);
+            height: var(--label-height);
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 0.15in 0.2in;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            color: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-weight: 800;
+            font-size: 14pt;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .meta-text {
+            font-size: 10pt;
+            margin: 1px 0;
+            line-height: 1.2;
+        }
+
+        .divider {
+            border-top: 1.5px solid #000;
+            margin: 6px 0;
+        }
+
+        .description-box {
+            font-size: 9pt;
+            font-style: italic;
+            line-height: 1.3;
+            flex-grow: 1;
+        }
+
+        .star { font-size: 16pt; line-height: 1; }
+
+        /* Print Button */
+        .print-btn {
+            padding: 10px 20px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Print Logic */
+        @media print {
+            body * { visibility: hidden; }
+            #vinyl-label-preview, #vinyl-label-preview * { visibility: visible; }
+            #vinyl-label-preview {
+                position: absolute;
+                left: 0;
+                top: 0;
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="label-generator-container">
+    <div class="input-grid">
+        <div class="input-group">
+            <label>Album Title</label>
+            <input type="text" id="in-title" placeholder="Kind of Blue" oninput="updateLabel()">
+        </div>
+        <div class="input-group">
+            <label>Artist</label>
+            <input type="text" id="in-artist" placeholder="Miles Davis" oninput="updateLabel()">
+        </div>
+        <div class="input-group">
+            <label>Genre / Subgenre</label>
+            <input type="text" id="in-genre" placeholder="Jazz → Modal Jazz" oninput="updateLabel()">
+        </div>
+        <div class="input-group">
+            <label>Date & Location</label>
+            <input type="text" id="in-date" placeholder="10.2022 @Village Vanguard" oninput="updateLabel()">
+        </div>
+        <div class="input-group" style="grid-column: span 2;">
+            <label>Recommended Track</label>
+            <input type="text" id="in-track" placeholder="So What" oninput="updateLabel()">
+        </div>
+        <textarea id="in-desc" placeholder="Enter record description here..." oninput="updateLabel()"></textarea>
+        
+        <div style="grid-column: span 2; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="in-star" onchange="updateLabel()" checked> 
+            <label style="margin:0;">Recommended Star?</label>
+        </div>
+    </div>
+
+    <div id="vinyl-label-preview">
+        <div class="header-line">
+            <span id="out-title-artist">KIND OF BLUE — MILES DAVIS</span>
+            <span id="out-star" class="star">★</span>
+        </div>
+        <div class="meta-text" id="out-genre">Jazz → Modal Jazz</div>
+        <div class="meta-text"><span id="out-date">A: 10.2022 @Village Vanguard</span></div>
+        <div class="meta-text">Recommended Track: "<span id="out-track">So What</span>"</div>
+        <div class="divider"></div>
+        <div class="description-box" id="out-desc">
+            A timeless masterpiece. This pressing sounds incredible, full of warmth and detail. Essential listening for any jazz fan.
+        </div>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">Print Label</button>
+</div>
+
+<script>
+    function updateLabel() {
+        const title = document.getElementById('in-title').value || "Album Title";
+        const artist = document.getElementById('in-artist').value || "Artist Name";
+        const genre = document.getElementById('in-genre').value || "Genre → Subgenre";
+        const date = document.getElementById('in-date').value || "MM.YYYY @Location";
+        const track = document.getElementById('in-track').value || "Song Name";
+        const desc = document.getElementById('in-desc').value || "Enter your description here...";
+        const star = document.getElementById('in-star').checked ? "★" : "";
+
+        document.getElementById('out-title-artist').innerText = `${title} — ${artist}`;
+        document.getElementById('out-star').innerText = star;
+        document.getElementById('out-genre').innerText = genre;
+        document.getElementById('out-date').innerText = "A: " + date;
+        document.getElementById('out-track').innerText = track;
+        document.getElementById('out-desc').innerText = desc;
+    }
+</script>
+
+</body>
+</html>
