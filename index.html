@@ -34,13 +34,13 @@
         input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         textarea { grid-column: span 2; height: 50px; resize: none; }
 
-        /* The Label Preview */
+/* The Label Preview Area */
         #vinyl-label-preview {
             width: var(--label-width);
             height: var(--label-height);
             background: white;
             border: 1px solid #000;
-            padding: 0.1in 0.15in;
+            padding: 0.08in 0.12in; /* Increased usable width */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -53,36 +53,37 @@
             justify-content: space-between;
             align-items: baseline;
             font-weight: 900;
-            font-size: 13pt;
+            font-size: 11pt; /* Slightly smaller to prevent horizontal clipping */
             text-transform: uppercase;
-            border-bottom: 2px solid #000;
-            padding-bottom: 2px;
-            margin-bottom: 4px;
+            border-bottom: 1.5px solid #000;
+            padding-bottom: 1px;
+            margin-bottom: 3px;
         }
 
         .meta-text {
-            font-size: 9pt;
+            font-size: 8.5pt; /* Optimized for 4-inch width */
             margin: 0;
+            line-height: 1.1;
+            margin-bottom: 2px;
+            white-space: normal; /* Allows wrapping so letters don't cut off */
+            overflow: visible;
+        }
+
+        .description-box {
+            font-size: 8pt;
+            font-style: italic;
             line-height: 1.2;
-            white-space: nowrap;
+            margin-top: 2px;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .divider {
             border-top: 1px solid #000;
             margin: 4px 0;
-        }
-
-        .description-box {
-            font-size: 8.5pt;
-            font-style: italic;
-            line-height: 1.2;
-            flex-grow: 1;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* Limits description to 2 lines to save space */
-            -webkit-box-orient: vertical;
         }
 
         .star { font-size: 14pt; }
@@ -151,7 +152,7 @@
             <span id="out-title-artist">KIND OF BLUE — MILES DAVIS</span>
             <span id="out-star" class="star">★</span>
         </div>
-        <div class="meta-text"><b id="out-genre">Jazz → Modal Jazz</b></div>
+        <div class="meta-text" id="out-genre">Jazz → Modal Jazz</div>
         <div class="meta-text">Pressing Quality: <span id="out-pressing">180g, NM condition</span></div>
         <div class="meta-text"><span id="out-date">A: 10.2022 @Village Vanguard</span></div>
         <div class="meta-text">Recommended Track: "<span id="out-track">So What</span>"</div>
